@@ -7,7 +7,7 @@ You can find their implementation in the Kernel module.
 
 it should be noted that in Elixir, the only falsey values are `nil` and the boolean `false`.
 
-```
+```elixir
 iex> if "a string value" do
 ...>  "Truthy"
 ...> end
@@ -16,7 +16,7 @@ iex> if "a string value" do
 
 Using `unless/2` is like `if/2` only it works on the negative:
 
-```
+```elixir
 iex> unless is_integer("hello") do
 ...>  "Not an Int"
 ...> end
@@ -27,7 +27,7 @@ iex> unless is_integer("hello") do
 
 If it's necessary to match agains multiple patterns we can use `case/2`:
 
-```
+```elixir
 iex> case {:ok, "Hello World"} do
 ...>  {:ok, result} -> result
 ...>  {:error} -> "Uh oh!"
@@ -38,7 +38,7 @@ iex> case {:ok, "Hello World"} do
 
 The `_` variable is an important inclusion in `case/2` statements. Whitout it, gailure to find a match will raise an error:
 
-```
+```elixir
 iex> case :even do
 ...>  :odd -> "Odd"
 ...> end
@@ -55,7 +55,7 @@ Consider the `_` as the `else` that will match **"everything else"**
 
 Since case/2 relies on pattern matching, all of the same rules and restrictions apply. If you intend to match against existing variables you must use the pin ^/1 operator:
 
-```
+```elixir
 iex> pie = 3.14
 3.14
 
@@ -68,7 +68,7 @@ end
 
 Another net feature of `case/2` is its support for guard clauses:
 
-```
+```elixir
 case {1, 2, 3} do
   {1, x, 3} when x > 0 ->
     "Will match"
@@ -82,7 +82,7 @@ end
 
 When we need to match conditions eather than values we can turn to `cond/1`l this is akin to `else if` or `elsif` from other languages
 
-```
+```elixir
 cond do
   2 + 2 == 5 ->
     "This will not be true"
@@ -96,7 +96,7 @@ end
 
 Like case/2, cond/1 will raise an error if there is no match. To handle this, we can define a condition set to true:
 
-```
+```elixir
 case do
   7 + 1 == 0 -> "Incorrect"
   true -> "Catch all"
@@ -111,7 +111,7 @@ The `with/1` expression is composed of the keyworkds, the generators, and finall
 
 We only need to know at the moment that they use pattern matching to compare the right side of the `<-` to the left.
 
-```
+```elixir
 user = %{first: "Sean", last: "Callan"}
 %{first: "Sean", last: "Callan"}
 
@@ -125,7 +125,7 @@ In the event that an expression fails to match, the non-matching value will be r
 
 Let's see a larger example without `with/1` and then see how we can refactor it:
 
-```
+```elixir
 case Repo.insert(changeset) do
   {:ok, user} ->
     case Guardian.encode_and_sign(user, :token, claims) do
@@ -141,7 +141,7 @@ case Repo.insert(changeset) do
 end
 ```
 
-```
+```elixir
 with {:ok, user} <- Repo.insert(changeset),
      {:ok, token, full_claims} <- Guardian.encode_and_sign(user, :token, claims) do
   important_stuff(token, full_claims)
@@ -150,7 +150,7 @@ end
 
 Finally, as of Elixir 1.3, `with/1` statements support `else`:
 
-```
+```elixir
 import Integer
 
 m = %{a: 1, c: 3}

@@ -6,7 +6,7 @@ Just as the names implies, an anonymous function has no name.
 To defnine an anonymous function in Elixir we neeed the `fn` and `end` keyworkds.
 Within these we can define any number of parameters and function body separated by `->`
 
-```
+```elixir
 sum = fn (a, b) -> a + b end
 sum.(2, 3)
 5
@@ -14,7 +14,7 @@ sum.(2, 3)
 
 ### The & Shorthand
 
-```
+```elixir
 sum = $(&1 + &1)
 sum.(2, 3)
 5
@@ -26,7 +26,7 @@ Pattern matching is not limited to just variables in Elixir, it can be applied t
 
 Elixir uses pattern matching to check through all possible match options and select the firs matching option to run:
 
-```
+```elixir
 handle_result = fn
   {:ok, result} -> IO.puts "Handling result..."
   {:ok, _} -> IO.puts "This would be never run as previous will be matched beforehand."
@@ -50,7 +50,7 @@ Named functions are defined within a module using the `def` keyword.
 
 Functions defined within a module are available to other modules for use.
 
-```
+```elixir
 defmodule Greeter do
   def hello(name) do
     "Hello, " <> name
@@ -63,7 +63,7 @@ Greeter.hello("Sean")
 
 If our function body only spans one line, we can shorten it further with `do:`:
 
-```
+```elixir
 defmodule Greeter do
   def hello(name), do: "Hello, " <> name
 end
@@ -71,7 +71,7 @@ end
 
 Armed with our knowledge of pattern matching, let's explore recursion using named functions:
 
-```
+```elixir
 defmodule Length do
   def of([]), do: 0
   def of([_ | tail], do: 1 + of(tail))
@@ -89,7 +89,7 @@ Length.of [1, 2, 3]
 Functions are named by the combination of given name and arity (number of arguments).
 This means you can do things like this:
 
-```
+```elixir
 defmodule Greeter do
   def hello(), do: "Hello, anonymous person!" # hello/0
   def hello(name), do: "Hello, " <> name # hello/1
@@ -104,7 +104,7 @@ Behind the scenes, functions are pattern-matching the arguments that they're cal
 Say we needed a function to accept a map but we're only interested in using a particular key.
 We can pattern-match the argument on the presence of that key
 
-```
+```elixir
 defmodule Greeter do
   def hello(%{name: person_name}) do
     IO.puts "Hello, " <> person_name
@@ -123,7 +123,7 @@ Greeter.hello(fred)
 
 In order to retiain and use all the data we are passing, we need to assign that entire map to its own variable for us to be able to use it.
 
-```
+```elixir
 defmodule Greeter do
   def hello(%{name: person_name} = person) do
     IO.puts "Hello, " <> person_name
@@ -140,7 +140,7 @@ end
 
 Private functions can only be called from within their own Module. We define them in Elixir with `depf`
 
-```
+```elixir
 defmodule Greeter do
   def hello(name), do: phrase() <> name
   defp phrase, do: "Hello, "
@@ -160,7 +160,7 @@ Once Elixir has matched a function any existing guardas will be tested.
 
 We rely on guards to determine which to use based on the argument's type
 
-```
+```elixir
 defmodule Greeter do
   def hello(names) when is_list(names) do
     names
@@ -183,7 +183,7 @@ Greeter.hello ["Sean", "Steve"]
 
 If we want a default value for an argument we use the `argument \\ value` syntax:
 
-```
+```elixir
 defmodule Greeter do
   def hello(name, langauge_code \\ "en") do
     phrase(language_code) <> name
@@ -205,7 +205,7 @@ Greeter.hello("Sean"m "es")
 
 Elixir does not like default arguments in multiple matching functions, it can be confusing. To handle this we add a function head with our default arguments:
 
-```
+```elixir
 defmodule Greeter do
   def hello(names, langauge_code \\ "en")
 
