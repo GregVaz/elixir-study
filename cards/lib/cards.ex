@@ -1,20 +1,14 @@
 defmodule Cards do
   @moduledoc """
-  Documentation for `Cards`.
+  Provides methods for creating and handling a deck of cards
   """
 
   @doc """
-  Return a list of cards
-
-  ## Examples
-
-      iex> Cards.create_deck()
-      [card1, card2]
-
+    Return a list of cards
   """
   def create_deck do
     values = ["Ace", "Two", "Three", "Four", "Five"]
-    suits = ["Spades", "Clubs", "Hearts", "Diaments"]
+    suits = ["Spades", "Clubs", "Hearts", "Diamonds"]
 
     # cards =
     #   for value <- values do
@@ -31,24 +25,19 @@ defmodule Cards do
   end
 
   @doc """
-  Return a suffle list of the deck
-
-  ## Examples
-
-      iex> Cards.shuffle()
-      [card2, card1]
-
+    Return a suffle list of the deck
   """
   def shuffle(deck) do
     Enum.shuffle(deck)
   end
 
   @doc """
-  Return a true or false if the card is into the deck
+    Determines whether a deck contains a given card
 
   ## Examples
 
-      iex> Cards.contains?(["Ace", "Two"], "Ace")
+      iex> deck = Cards.create_deck()
+      iex> Cards.contains?(deck, "Ace of Spades")
       true
 
   """
@@ -61,8 +50,9 @@ defmodule Cards do
 
   ## Examples
 
-      iex> Cards.deal(["Ace", "Two"], 2)
-      ["Ace", "Two"]
+      iex> deck = Cards.create_deck()
+      iex> Cards.deal(deck, 2)
+      ["Ace of Spades", "Two of Spades"]
 
   """
   def deal(deck, hand_size) do
@@ -71,13 +61,7 @@ defmodule Cards do
   end
 
   @doc """
-  Save a list of cards into a file system
-
-  ## Examples
-
-      iex> Cards.save(["Ace", "Two"], "my_deck")
-      :ok
-
+    Save a list of cards into a file system
   """
   def save(deck, filename) do
     binary = :erlang.term_to_binary(deck)
@@ -85,17 +69,21 @@ defmodule Cards do
   end
 
   @doc """
-  Load a list of cards from a file system
-
-  ## Examples
-
-      iex> Cards.load("my_deck")
-      ["Ace", "Two"]
+    Load a list of cards from a file system
   """
   def load(filename) do
     case File.read(filename) do
       {:ok, binary} -> :erlang.binary_to_term(binary)
       {:error, _reason} -> "That file does not exists"
     end
+  end
+
+  @doc """
+    Create a hand for the user using the create_deck, shuffle and deal methods
+  """
+  def create_hand(hand_size) do
+    create_deck()
+    |> Cards.shuffle()
+    |> Cards.deal(hand_size)
   end
 end
