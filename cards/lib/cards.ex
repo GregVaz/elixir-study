@@ -71,7 +71,7 @@ defmodule Cards do
   end
 
   @doc """
-  Save a list of cards in a file system
+  Save a list of cards into a file system
 
   ## Examples
 
@@ -85,7 +85,7 @@ defmodule Cards do
   end
 
   @doc """
-  Load a list of cards in a file system
+  Load a list of cards from a file system
 
   ## Examples
 
@@ -93,11 +93,9 @@ defmodule Cards do
       ["Ace", "Two"]
   """
   def load(filename) do
-    {status, binary} = File.read(filename)
-
-    case status do
-      :ok -> :erlang.binary_to_term(binary)
-      :error -> "That file does not exists"
+    case File.read(filename) do
+      {:ok, binary} -> :erlang.binary_to_term(binary)
+      {:error, _reason} -> "That file does not exists"
     end
   end
 end
