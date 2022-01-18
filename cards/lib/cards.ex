@@ -55,4 +55,49 @@ defmodule Cards do
   def contains?(deck, hand) do
     Enum.member?(deck, hand)
   end
+
+  @doc """
+  Return a list of requested cards
+
+  ## Examples
+
+      iex> Cards.deal(["Ace", "Two"], 2)
+      ["Ace", "Two"]
+
+  """
+  def deal(deck, hand_size) do
+    {hand, _} = Enum.split(deck, hand_size)
+    hand
+  end
+
+  @doc """
+  Save a list of cards in a file system
+
+  ## Examples
+
+      iex> Cards.save(["Ace", "Two"], "my_deck")
+      :ok
+
+  """
+  def save(deck, filename) do
+    binary = :erlang.term_to_binary(deck)
+    File.write(filename, binary)
+  end
+
+  @doc """
+  Load a list of cards in a file system
+
+  ## Examples
+
+      iex> Cards.load("my_deck")
+      ["Ace", "Two"]
+  """
+  def load(filename) do
+    {status, binary} = File.read(filename)
+
+    case status do
+      :ok -> :erlang.binary_to_term(binary)
+      :error -> "That file does not exists"
+    end
+  end
 end
