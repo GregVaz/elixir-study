@@ -20,6 +20,14 @@ defmodule DiscussWeb.Router do
     resources("/", TopicController)
   end
 
+  scope "/auth", Discuss do
+    pipe_through :browser
+
+    # With :provider we can now handle different providers like Facebook, Github, etc.
+    get "/:provider", AuthController, :request
+    get "/:provider/callback", AuthController, :callback
+  end
+
   # Other scopes may use custom stacks.
   # scope "/api", DiscussWeb do
   #   pipe_through :api
