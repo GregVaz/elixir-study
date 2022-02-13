@@ -1,5 +1,6 @@
 defmodule DiscussWeb.TopicController do
   use DiscussWeb, :controller
+  import Ecto, warn: false
 
   alias Discuss.Repo
 
@@ -18,7 +19,10 @@ defmodule DiscussWeb.TopicController do
   end
 
   def create(conn, %{"topic" => topic}) do
-    changeset = Topic.changeset(%Topic{}, topic)
+    changeset =
+      conn.assigns.user
+      |> build_assoc(:topics)
+      |> Topic.changeset(topic)
 
     case Repo.insert(changeset) do
       {:ok, _post} ->
