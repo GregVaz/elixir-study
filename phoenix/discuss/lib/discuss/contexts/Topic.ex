@@ -5,6 +5,7 @@ defmodule Discuss.Contexts.Topic do
 
   schema "topics" do
     field(:title, :string)
+    belongs_to(:user, Discuss.Contexts.User)
   end
 
   def changeset(struct, params \\ %{}) do
