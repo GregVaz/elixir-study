@@ -8,6 +8,7 @@ defmodule DiscussWeb.Router do
     plug(:put_root_layout, {DiscussWeb.LayoutView, :root})
     plug(:protect_from_forgery)
     plug(:put_secure_browser_headers)
+    plug DiscussWeb.Plugs.SetUser
   end
 
   pipeline :api do
@@ -23,6 +24,7 @@ defmodule DiscussWeb.Router do
   scope "/auth", Discuss do
     pipe_through :browser
 
+    get "/signout", AuthController, :signout
     # With :provider we can now handle different providers like Facebook, Github, etc.
     get "/:provider", AuthController, :request
     get "/:provider/callback", AuthController, :callback
