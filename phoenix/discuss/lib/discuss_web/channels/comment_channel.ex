@@ -1,13 +1,13 @@
 defmodule DiscussWeb.CommentChannel do
   use DiscussWeb, :channel
+  alias Discuss.Repo
+  alias Discuss.Contexts.Topic
 
   @impl true
-  def join("comment:1", payload, socket) do
-    {:ok, socket}
-  end
+  def join("comment:" <> topic_id, _payload, socket) do
+    topic = Repo.get(Topic, topic_id)
 
-  def join("comment:" <> _private_room_id, _params, _socket) do
-    {:error, %{reason: "unauthorized"}}
+    {:ok, %{}, socket}
   end
 
   # Channels can be used in a request/response fashion

@@ -1,1 +1,7 @@
 <%= @topic.title %>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    window.createSocket("<%= @topic.id %>")
+  })
+</script>
