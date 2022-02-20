@@ -1,4 +1,8 @@
 defmodule Discuss.Contexts.Topic do
+  @moduledoc """
+  The Contexts.Topic Schema.
+  """
+
   use Discuss.Schema
 
   import Ecto.Changeset

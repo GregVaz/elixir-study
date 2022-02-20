@@ -2,25 +2,23 @@ defmodule DiscussWeb.TopicController do
   use DiscussWeb, :controller
   import Ecto, warn: false
 
-  alias Discuss.Repo
-
-  alias Discuss.Contexts.Topic
+  alias Discuss.Contexts.TopicManager
 
   plug DiscussWeb.Plugs.RequiredAuth when action in [:new, :create, :edit, :update, :delete]
   plug :check_topic_owner when action in [:update, :edit, :delete]
 
   def index(conn, _params) do
-    topics = Repo.all(Topic)
+    topics = TopicManager.list()
     render(conn, "index.html", topics: topics)
   end
 
   def show(conn, %{"id" => topic_id}) do
-    topic = Repo.get(Topic, topic_id)
+    topic = TopicManager.get!(topic_id)
     render(conn, "show.html", topic: topic)
   end
 
   def new(conn, _params) do
-    changeset = Topic.changeset(%Topic{}, %{})
+    changeset = TopicManager.change(%{})
     render(conn, "new.html", changeset: changeset)
   end
 
@@ -28,9 +26,9 @@ defmodule DiscussWeb.TopicController do
     changeset =
       conn.assigns.user
       |> build_assoc(:topics)
-      |> Topic.changeset(topic)
+      |> TopicManager.change(topic)
 
-    case Repo.insert(changeset) do
+    case TopicManager.create(changeset) do
       {:ok, _post} ->
         conn
         |> put_flash(:info, "Topic Created")
@@ -42,17 +40,16 @@ defmodule DiscussWeb.TopicController do
   end
 
   def edit(conn, %{"id" => topic_id}) do
-    topic = Repo.get(Topic, topic_id)
-    changeset = Topic.changeset(topic)
+    topic = TopicManager.get!(topic_id)
+    changeset = TopicManager.change(topic)
 
     render(conn, "edit.html", changeset: changeset, topic: topic)
   end
 
   def update(conn, %{"id" => topic_id, "topic" => topic}) do
-    old_topic = Repo.get(Topic, topic_id)
-    changeset = Topic.changeset(old_topic, topic)
+    old_topic = TopicManager.get!(topic_id)
 
-    case Repo.update(changeset) do
+    case TopicManager.update(old_topic, topic) do
       {:ok, _topic} ->
         conn
         |> put_flash(:info, "Topic Updated")
@@ -64,7 +61,7 @@ defmodule DiscussWeb.TopicController do
   end
 
   def delete(conn, %{"id" => topic_id}) do
-    Repo.get!(Topic, topic_id) |> Repo.delete!()
+    TopicManager.get!(topic_id) |> TopicManager.delete!()
 
     conn
     |> put_flash(:info, "Topic Deleted")
@@ -72,7 +69,7 @@ defmodule DiscussWeb.TopicController do
   end
 
   def check_topic_owner(%{params: %{"id" => topic_id}} = conn, _params) do
-    if Repo.get(Topic, topic_id).user_id == conn.assigns.user.id do
+    if TopicManager.get!(topic_id).user_id == conn.assigns.user.id do
       conn
     else
       conn
