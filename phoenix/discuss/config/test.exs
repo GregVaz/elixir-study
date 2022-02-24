@@ -9,7 +9,7 @@ config :discuss, Discuss.Repo,
   username: "postgres",
   password: "postgres",
   hostname: "localhost",
-  database: "discuss_test#{System.get_env("MIX_TEST_PARTITION")}",
+  database: "discuss_test",
   pool: Ecto.Adapters.SQL.Sandbox,
   pool_size: 10
 
